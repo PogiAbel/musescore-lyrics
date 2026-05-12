@@ -150,7 +150,7 @@ def main():
 
     tk.Button(bottom, text="Fetch", command=fetch_song).pack(side='left')
     tk.Button(bottom, text="Process", command=process_current).pack(side='left', padx=4)
-    tk.Button(bottom, text="Copy Processed", command=copy_processed).pack(side='left', padx=4)
+    tk.Button(bottom, text="Copy", command=copy_processed).pack(side='left', padx=4)
     tk.Button(bottom, text="Clear All", command=clear_all).pack(side='left', padx=4)
     tk.Button(bottom, text="Quit", command=root.quit).pack(side='right')
 
