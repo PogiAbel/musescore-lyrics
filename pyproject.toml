@@ -5,16 +5,13 @@ description = "Get lyrics from songspraise.com and parse for musescore"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "lxml>=6.1.0",
     "pyperclip>=1.11.0",
+    "pyphen>=0.17.2",
     "requests>=2.34.0",
 ]
 
 [project.scripts]
 musescore-lyrics = "musescore_lyrics.main:main"
-
-[tool.uv.scripts]
-build = "pyinstaller musescore-lyrics.spec"
 
 [build-system]
 requires = ["hatchling"]

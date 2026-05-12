@@ -1,23 +1,22 @@
 import requests
-import lxml
 import pyperclip
 import re
 import sys
 import tkinter as tk
+import pyphen
 
 def get_hyphenated_word(input_list):
-    word_list = input_list.copy()
-    search_string = '+'.join(word_list)
+    dic = pyphen.Pyphen(lang="hu_HU")
+    result = []
 
-    response = requests.get(f'https://helyesiras.mta.hu/helyesiras/default/hyph?q={search_string}')
-    doc = lxml.etree.HTML(response.text) # type: ignore
-    answers = doc.xpath('//ul[@class="result"]/li/i')
+    for word in input_list:
+        hyphenated = dic.inserted(word)
+        result.append(hyphenated)
 
-    for i,answer in enumerate(answers):
-        stripped = answer.text.strip().replace('|', '').replace('-', '')
-        word_list[i] = word_list[i].replace(stripped, answer.text.replace('|', '').split(',')[0])
+    return result
 
-    return word_list
+def get_id_from_url(url: str):
+    return url.split("/")[-1]
 
 def normalize(string):
     out = re.sub(r'[\d.]', '', string)
@@ -55,7 +54,7 @@ def main():
     top_frame = tk.Frame(root)
     top_frame.pack(fill='x', padx=8, pady=6)
 
-    tk.Label(top_frame, text="Song ID:").pack(side='left')
+    tk.Label(top_frame, text="Song url:").pack(side='left')
     songid_var = tk.StringVar()
     songid_entry = tk.Entry(top_frame, textvariable=songid_var, width=20)
     songid_entry.pack(side='left', padx=(4, 8))
@@ -95,31 +94,22 @@ def main():
 
     # Actions
     def fetch_song():
-        sid = songid_var.get().strip()
-        if not sid:
-            status_var.set("Provide a Song ID")
+        surl = songid_var.get().strip()
+        if not surl:
+            status_var.set("Provide a Song url")
             return
         status_var.set("Fetching...")
         root.update_idletasks()
         try:
+            sid = get_id_from_url(surl)
             url = f'https://www.songpraise.com/api/song/{sid}'
             lyrics = get_song_lyrics(url)
             original_text.delete('1.0', 'end')
             original_text.insert('1.0', lyrics_to_text(lyrics))
             processed_text.delete('1.0', 'end')
-            status_var.set("Fetched and saved to original_lyrics.txt")
+            status_var.set("Fetched lyrics")
         except Exception as e:
             status_var.set(f"Error: {e}")
-
-    def load_from_file():
-        try:
-            with open('original_lyrics.txt', 'r', encoding='utf-8') as f:
-                data = f.read().strip()
-            original_text.delete('1.0', 'end')
-            original_text.insert('1.0', data)
-            status_var.set("Loaded original_lyrics.txt")
-        except Exception as e:
-            status_var.set(f"Load error: {e}")
 
     def process_current():
         lyrics = text_to_lyrics(original_text)
@@ -132,25 +122,10 @@ def main():
             process_lyrics(lyrics)
             processed_text.delete('1.0', 'end')
             processed_text.insert('1.0', lyrics_to_text(lyrics))
-            status_var.set("Processed and saved to lyrics.txt")
+            status_var.set("Processed lyrics")
         except Exception as e:
-            status_var.set(f"Processing error: {e}")
-
-    def save_original():
-        try:
-            with open('original_lyrics.txt', 'w', encoding='utf-8') as f:
-                f.write(original_text.get('1.0', 'end').strip())
-            status_var.set("Original saved to original_lyrics.txt")
-        except Exception as e:
-            status_var.set(f"Save error: {e}")
-
-    def save_processed():
-        try:
-            with open('lyrics.txt', 'w', encoding='utf-8') as f:
-                f.write(processed_text.get('1.0', 'end').strip())
-            status_var.set("Processed saved to lyrics.txt")
-        except Exception as e:
-            status_var.set(f"Save error: {e}")
+            print(e)
+            status_var.set(f"Processing error")
 
     def copy_processed():
         try:
@@ -174,10 +149,7 @@ def main():
     bottom.pack(fill='x', padx=8, pady=(0,8))
 
     tk.Button(bottom, text="Fetch", command=fetch_song).pack(side='left')
-    tk.Button(bottom, text="Load file", command=load_from_file).pack(side='left', padx=4)
     tk.Button(bottom, text="Process", command=process_current).pack(side='left', padx=4)
-    tk.Button(bottom, text="Save Original", command=save_original).pack(side='left', padx=4)
-    tk.Button(bottom, text="Save Processed", command=save_processed).pack(side='left', padx=4)
     tk.Button(bottom, text="Copy Processed", command=copy_processed).pack(side='left', padx=4)
     tk.Button(bottom, text="Clear All", command=clear_all).pack(side='left', padx=4)
     tk.Button(bottom, text="Quit", command=root.quit).pack(side='right')
