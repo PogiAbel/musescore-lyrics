@@ -5,9 +5,11 @@ description = "Get lyrics from songspraise.com and parse for musescore"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "lxml>=6.1.0",
     "pyperclip>=1.11.0",
     "pyphen>=0.17.2",
     "requests>=2.34.0",
+    "truststore>=0.10.4",
 ]
 
 [project.scripts]

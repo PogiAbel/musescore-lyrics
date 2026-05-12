@@ -9,6 +9,8 @@ Használati útmutató:
 
 Ezután már a musescoreba a ctr+v -t nyomogatva tudunk végig menni a szavakon.
 
+Vannak eszközök, amiket a "select custom tool" -ban lehet elérni, ezek meg tudják mutatni ha valahol nincs elválasztva és esetleg ezeket elválasztja.
+
 
 
 
