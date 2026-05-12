@@ -1,0 +1,26 @@
+[project]
+name = "musescore-lyrics"
+version = "0.1.0"
+description = "Get lyrics from songspraise.com and parse for musescore"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "lxml>=6.1.0",
+    "pyperclip>=1.11.0",
+    "requests>=2.34.0",
+]
+
+[project.scripts]
+musescore-lyrics = "musescore_lyrics.main:main"
+
+[tool.uv.scripts]
+build = "pyinstaller musescore-lyrics.spec"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.20.0",
+]

@@ -1,0 +1,9 @@
+*.json
+*.txt
+assets/
+.vscode
+.venv
+test.py
+__pycache__
+build/
+dist/
