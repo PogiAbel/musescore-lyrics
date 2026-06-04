@@ -5,7 +5,7 @@ import sys
 import tkinter as tk
 import pyphen
 
-from .tools import CUSTOM_TOOLS, run_tool
+from musescore_lyrics.tools import CUSTOM_TOOLS, run_tool
 
 def get_hyphenated_word(input_list):
     dic = pyphen.Pyphen(lang="hu_HU")
