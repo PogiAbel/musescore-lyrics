@@ -115,7 +115,7 @@ def mta_hyphen(original_text: str, processed_text: str):
             answers = doc.xpath('//ul[@class="result"]/li/i/text()')
 
             return {
-                word_list[i]: answers[i]
+                word_list[i]: answers[i].split(',')[0]
                 for i in range(min(len(word_list), len(answers)))
             }
 
@@ -137,6 +137,8 @@ def mta_hyphen(original_text: str, processed_text: str):
     for i in range(0, len(words_to_query), batch_size):
         batch = words_to_query[i:i + batch_size]
         cache.update(get_mta_hyphenation(batch))
+
+    print("cache:", cache)
 
     # --- replace function ---
     def replace_word(match):
