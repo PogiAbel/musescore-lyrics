@@ -21,14 +21,11 @@ def get_id_from_url(url: str):
     return url.split("/")[-1]
 
 def normalize(string):
-    out = re.sub(r'[\d.]', '', string)
-    out = re.sub(r'[\n]', ' ', out)
-    out = re.sub(r'[\/:]+', ' ', out)
-    out = re.sub(r'[\:]+', ' ', out)
+    out = re.sub(r'[\n]', ' ', string)
     
     return out
 
-def get_word_list(lyrics):
+def get_word_list(lyrics) -> list[str]: 
     word_list = []
     for line in lyrics:
         word_list += line.split()
@@ -41,10 +38,22 @@ def get_song_lyrics(url):
     lyrics = [[normalize(x['text'])] for x in result['songVerseDTOS']]
     return lyrics
 
+def checkS(word_list: list[str]):
+    specialSpace = "\u00A0"
+    indexes = []
+    for (i,v) in enumerate(word_list):
+        if ( v == 's' or v == "S"):
+            indexes.append(i)
+
+    for i in indexes:
+        word_list[i] += specialSpace + word_list[i+1]
+        word_list.pop(i+1)
+
 def process_lyrics(lyrics):
     for verse in lyrics:
         word_list = get_word_list(verse)
         hyphenated = get_hyphenated_word(word_list)
+        checkS(hyphenated)
         verse[0] = ' '.join(hyphenated)
 
 def main():

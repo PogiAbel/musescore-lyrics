@@ -115,7 +115,7 @@ def mta_hyphen(original_text: str, processed_text: str):
             answers = doc.xpath('//ul[@class="result"]/li/i/text()')
 
             return {
-                word_list[i]: answers[i].split(',')[0]
+                word_list[i]: answers[i].split(',')[0].replace('|','')
                 for i in range(min(len(word_list), len(answers)))
             }
 
