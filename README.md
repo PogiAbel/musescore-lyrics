@@ -1,5 +1,9 @@
 Songpraise.com énekek musescore kompatibilis formába való konvertálása
 
+Letöltés: [download](https://github.com/PogiAbel/musescore-lyrics/releases/latest/download/musescore-lyrics.exe)
+
+---
+
 Használati útmutató:
 1. [songpraise](songpraise.com) weboldalon kiválasztjuk az énekünket.
 2. Az url címet berakjuk fentre a song url-be
